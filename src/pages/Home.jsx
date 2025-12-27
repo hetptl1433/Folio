@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Canvas } from "@react-three/fiber"
 import { Suspense } from "react"
-import { Loader } from "../components/loader"
+import { Loader } from "../components/Loader"
 import Island from "../models/Island"
 import { Sky } from "../models/Sky"
 import { Bird } from "../models/Bird"
