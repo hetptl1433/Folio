@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Canvas } from "@react-three/fiber"
 import { Suspense } from "react"
 import { Loader } from "../components/Loader"
@@ -29,17 +29,17 @@ export const Home = () => {
   const [targetStage, setTargetStage] = useState(null);
   const totalStages = 4;
 
-  const handleStageChange = (direction) => {
-    setHasInteracted(true);
-    useEffect(() => {
+  useEffect(() => {
     if (isPlayingMusic) {
       audioRef.current.play();
-    }
-
-    return () => {
+    } else {
       audioRef.current.pause();
-    };
+    }
   }, [isPlayingMusic]);
+
+  const handleStageChange = useCallback((direction) => {
+    setHasInteracted(true);
+    setIsRotating(true);
     setTargetStage(() => {
       const baseStage = currentStage ?? 1;
       const nextStage = baseStage + direction;
@@ -47,7 +47,20 @@ export const Home = () => {
       if (nextStage > totalStages) return 1;
       return nextStage;
     });
-  };
+  }, [currentStage, totalStages]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        handleStageChange(-1);
+      } else if (e.key === 'ArrowRight') {
+        handleStageChange(1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleStageChange]);
 
     const adjustIslandForScreenSize = () => {
         let screenScale = null;

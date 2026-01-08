@@ -52,23 +52,6 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, targetStage, setTa
     lastx.current = clientX;
   }
 
-  const handlekeydown = (e) => {
-    if(e.key === 'ArrowLeft'){
-      if(isRotating) setIsRotating(false);
-      islandRef.current.rotation.y += 0.01 * Math.PI; 
-
-
-    } else if(e.key === 'ArrowRight'){
-   if(isRotating) setIsRotating(false);
-      islandRef.current.rotation.y -= 0.01 * Math.PI;
-    }
-  }
-
-  const handlekeyup = (e) => {
-    if(e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
-      setIsRotating(true);
-    }
-  }
   useFrame((_, delta) => {
     if (targetStage && islandRef.current) {
       const targetRotationByStage = {
@@ -88,9 +71,14 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, targetStage, setTa
       islandRef.current.rotation.y +=
         Math.sign(diff) * Math.min(Math.abs(diff), rotationStep);
 
+      if (setIsRotating) {
+        setIsRotating(Math.abs(diff) >= 0.02);
+      }
+
       if (Math.abs(diff) < 0.02) {
         if (setCurrentStage) setCurrentStage(targetStage);
         if (setTargetStage) setTargetStage(null);
+        if (setIsRotating) setIsRotating(false);
       }
 
       return;
@@ -134,16 +122,12 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, targetStage, setTa
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
     canvas.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('keydown', handlekeydown);
-    document.addEventListener('keyup', handlekeyup);
     
     
     return () => {
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
       canvas.removeEventListener('pointerdown', handlePointerDown);
-      document.removeEventListener('keydown', handlekeydown);
-      document.removeEventListener('keyup', handlekeyup);
     } 
   }, [gl, handlePointerMove, handlePointerUp, handlePointerDown]);
 
