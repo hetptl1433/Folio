@@ -5,7 +5,7 @@ const InfoBox = ({text, link, btnText}) => {
     return (
         <div className="info-box">
             <p className='font-medium sm:text-xl text-center'>{text}</p>
-            <Link to={link}  className='neo-brutalism-white neo-btn '>{btnText} <img sec={arrow} className='w-4 h-4 object-contain'></img></Link>
+            <Link to={link}  className='neo-brutalism-white neo-btn '>{btnText} <img src={arrow} alt='' className='w-4 h-4 object-contain' /></Link>
         </div>
     );
 };
