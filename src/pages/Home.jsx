@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Canvas } from "@react-three/fiber"
 import { Suspense } from "react"
 import { Loader } from "../components/Loader"
@@ -8,13 +8,21 @@ import { Bird } from "../models/Bird"
 import { Plane } from "../models/Plane"
 import { HomeInfo } from "../components/HomeInfo"
 import { arrow } from "../assets/icons"
-
+import sakura from '../assets/sakura.mp3';
+import soundon from '../assets/icons/soundon.png';
+import soundoff from '../assets/icons/soundoff.png';
+// export const Home = () => {
 //   <section className='w-full h-screen relative'>
 //         <div className='absolute top-28 left-0 right-0 z-10 flex items-center justify-center'>
             
 //         </div>
 //     </section>
 export const Home = () => {
+   const audioRef = useRef(new Audio(sakura));
+   const [isPlayingMusic, setIsPlayingMusic] = useState(true);
+
+  audioRef.current.volume = 0.4;
+  audioRef.current.loop = true;
     const [isRotating, setIsRotating] = useState(false);
   const [currentStage, setCurrentStage] = useState(1);
   const [hasInteracted, setHasInteracted] = useState(true);
@@ -23,6 +31,15 @@ export const Home = () => {
 
   const handleStageChange = (direction) => {
     setHasInteracted(true);
+    useEffect(() => {
+    if (isPlayingMusic) {
+      audioRef.current.play();
+    }
+
+    return () => {
+      audioRef.current.pause();
+    };
+  }, [isPlayingMusic]);
     setTargetStage(() => {
       const baseStage = currentStage ?? 1;
       const nextStage = baseStage + direction;
@@ -99,9 +116,17 @@ export const Home = () => {
         <Bird/>
         <Sky isRotating={isRotating}/>
         <Island position={islandPosition} scale={islandScale} rotation={islandRotation} isRotating={isRotating} setIsRotating={setIsRotating} setCurrentStage={setCurrentStage} targetStage={targetStage} setTargetStage={setTargetStage}/>
-        <Plane planeScale={planeScale} planePosition={planePosition} isRotating={isRotating || Boolean(targetStage)} rotation={[0,20,0]} />
+        <Plane scale={planeScale} position={planePosition} isRotating={isRotating || Boolean(targetStage)} rotation={[0,20,0]} />
       </Suspense>
     </Canvas>
+     <div className='absolute bottom-2 left-2'>
+        <img
+          src={!isPlayingMusic ? soundoff : soundon}
+          alt='jukebox'
+          onClick={() => setIsPlayingMusic(!isPlayingMusic)}
+          className='w-10 h-10 cursor-pointer object-contain'
+        />
+      </div>
   </section>
   )
 }

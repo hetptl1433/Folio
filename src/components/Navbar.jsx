@@ -15,3 +15,6 @@ export const Navbar = () => {
     </header>
   )
 }
+
+
+export default Navbar;
