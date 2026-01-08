@@ -11,13 +11,13 @@ const InfoBox = ({text, link, btnText}) => {
 };
  const renderContent = {
         1: (
-           <h1 className='sm:text-xl sm:leading-snug text-center neo-brutalism-blue py-4 px-8 text-white mx-5' >Hi, I am <span className='font-semibold'>Het</span> 👋<br/>Sofwear Engineer from Chicago </h1>
+           <h1 className='sm:text-xl sm:leading-snug text-center neo-brutalism-blue py-4 px-8 text-white mx-5' >Hi, I am <span className='font-semibold'>Het</span> 👋<br/>I turn ideas into polished web apps with modern tooling.</h1>
         ),
         2: (
-            <InfoBox text={"Worked with many companies and gathered lot of skills"} link={'/about'} btnText={'Learn More'}/>
+            <InfoBox text={"Built products across several teams—bringing experience in React, 3D, AI features, and full‑stack delivery"} link={'/about'} btnText={'Learn More'}/>
         ),
         3: (
-                      <InfoBox text={"Led multiple projects to my success"} link={'/Projects'} btnText={'Visit portfolio'}/>
+          <InfoBox text={"Led multiple projects from prototype to launch—shipping with React, 3D, and AI tooling"} link={'/Projects'} btnText={'Visit portfolio'}/>
 
         ),
         4: (
