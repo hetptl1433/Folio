@@ -12,16 +12,31 @@ const Footer = () => {
           © 2026 <strong>Het Patel</strong>. All rights reserved.
         </p>
 
-        <div className='flex gap-3 justify-center items-center'>
-          {socialLinks.map((link) => (
-            <Link key={link.name} to={link.link} target='_blank'>
-              <img
-                src={link.iconUrl}
-                alt={link.name}
-                className='w-6 h-6 object-contain'
-              />
-            </Link>
-          ))}
+        <div className='flex items-center justify-center gap-3'>
+          {socialLinks.map((link) =>
+            link.link.startsWith("http") ? (
+              <a
+                key={link.name}
+                href={link.link}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <img
+                  src={link.iconUrl}
+                  alt={link.name}
+                  className='h-6 w-6 object-contain'
+                />
+              </a>
+            ) : (
+              <Link key={link.name} to={link.link}>
+                <img
+                  src={link.iconUrl}
+                  alt={link.name}
+                  className='h-6 w-6 object-contain'
+                />
+              </Link>
+            )
+          )}
         </div>
       </div>
     </footer>

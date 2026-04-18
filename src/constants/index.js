@@ -1,228 +1,211 @@
-import { meta, shopify, starbucks, tesla } from "../assets/images";
+import { download, web, ILTECH } from "../assets/images";
 import {
-    car,
-    contact,
-    css,
-    estate,
-    express,
-    git,
-    github,
-    html,
-    javascript,
-    linkedin,
-    mongodb,
-    motion,
-    mui,
-    nextjs,
-    nodejs,
-    pricewise,
-    react,
-    redux,
-    sass,
-    snapgram,
-    summiz,
-    tailwindcss,
-    threads,
-    typescript
+  contact,
+  css,
+  estate,
+  express,
+  git,
+  github,
+  html,
+  javascript,
+  linkedin,
+  mongodb,
+  nodejs,
+  pricewise,
+  react,
+  summiz,
+  threads,
 } from "../assets/icons";
 
 export const skills = [
-    {
-        imageUrl: css,
-        name: "CSS",
-        type: "Frontend",
-    },
-    {
-        imageUrl: express,
-        name: "Express",
-        type: "Backend",
-    },
-    {
-        imageUrl: git,
-        name: "Git",
-        type: "Version Control",
-    },
-    {
-        imageUrl: github,
-        name: "GitHub",
-        type: "Version Control",
-    },
-    {
-        imageUrl: html,
-        name: "HTML",
-        type: "Frontend",
-    },
-    {
-        imageUrl: javascript,
-        name: "JavaScript",
-        type: "Frontend",
-    },
-    {
-        imageUrl: mongodb,
-        name: "MongoDB",
-        type: "Database",
-    },
-    {
-        imageUrl: motion,
-        name: "Motion",
-        type: "Animation",
-    },
-    {
-        imageUrl: mui,
-        name: "Material-UI",
-        type: "Frontend",
-    },
-    {
-        imageUrl: nextjs,
-        name: "Next.js",
-        type: "Frontend",
-    },
-    {
-        imageUrl: nodejs,
-        name: "Node.js",
-        type: "Backend",
-    },
-    {
-        imageUrl: react,
-        name: "React",
-        type: "Frontend",
-    },
-    {
-        imageUrl: redux,
-        name: "Redux",
-        type: "State Management",
-    },
-    {
-        imageUrl: sass,
-        name: "Sass",
-        type: "Frontend",
-    },
-    {
-        imageUrl: tailwindcss,
-        name: "Tailwind CSS",
-        type: "Frontend",
-    },
-    {
-        imageUrl: typescript,
-        name: "TypeScript",
-        type: "Frontend",
-    }
+  {
+    imageUrl: javascript,
+    name: "JavaScript",
+    type: "Programming",
+  },
+  {
+    imageUrl: react,
+    name: "React",
+    type: "Frontend",
+  },
+  {
+    imageUrl: nodejs,
+    name: "Node.js",
+    type: "Backend",
+  },
+  {
+    imageUrl: express,
+    name: "Express.js",
+    type: "Backend",
+  },
+  {
+    imageUrl: mongodb,
+    name: "MongoDB",
+    type: "Database",
+  },
+  {
+    imageUrl: git,
+    name: "Git",
+    type: "Version Control",
+  },
+  {
+    imageUrl: html,
+    name: "HTML",
+    type: "Frontend",
+  },
+  {
+    imageUrl: css,
+    name: "CSS",
+    type: "Frontend",
+  },
+];
+
+export const skillCategories = [
+  {
+    title: "Programming",
+    items: ["Python", "SQL", "Java", "JavaScript", "C", "C++"],
+  },
+  {
+    title: "Machine Learning",
+    items: [
+      "PyTorch",
+      "TensorFlow",
+      "Keras",
+      "scikit-learn",
+      "Predictive Modeling",
+      "Model Evaluation",
+    ],
+  },
+  {
+    title: "Data Science",
+    items: [
+      "pandas",
+      "NumPy",
+      "Data Cleaning",
+      "Feature Engineering",
+      "Time-Series Analysis",
+      "Anomaly Detection",
+      "Trend Analysis",
+    ],
+  },
+  {
+    title: "Software Development",
+    items: ["REST APIs", "MongoDB", "React", "Node.js", "Express.js", "AWS", "Git"],
+  },
+];
+
+export const education = [
+  {
+    school: "Illinois Institute of Technology",
+    degree: "Master of Science in Computer Science",
+    location: "Chicago, IL",
+    date: "Dec 2025",
+  },
+  {
+    school: "Sardar Vallabhbhai Institute of Technology",
+    degree: "Bachelor of Science in Computer Science",
+    location: "Anand, India",
+    date: "May 2024",
+  },
 ];
 
 export const experiences = [
-    {
-        title: "React.js Developer",
-        company_name: "Starbucks",
-        icon: starbucks,
-        iconBg: "#accbe1",
-        date: "March 2020 - April 2021",
-        points: [
-            "Developing and maintaining web applications using React.js and other related technologies.",
-            "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-            "Implementing responsive design and ensuring cross-browser compatibility.",
-            "Participating in code reviews and providing constructive feedback to other developers.",
-        ],
-    },
-    {
-        title: "React Native Developer",
-        company_name: "Tesla",
-        icon: tesla,
-        iconBg: "#fbc3bc",
-        date: "Jan 2021 - Feb 2022",
-        points: [
-            "Developing and maintaining web applications using React.js and other related technologies.",
-            "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-            "Implementing responsive design and ensuring cross-browser compatibility.",
-            "Participating in code reviews and providing constructive feedback to other developers.",
-        ],
-    },
-    {
-        title: "Web Developer",
-        company_name: "Shopify",
-        icon: shopify,
-        iconBg: "#b7e4c7",
-        date: "Jan 2022 - Jan 2023",
-        points: [
-            "Developing and maintaining web applications using React.js and other related technologies.",
-            "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-            "Implementing responsive design and ensuring cross-browser compatibility.",
-            "Participating in code reviews and providing constructive feedback to other developers.",
-        ],
-    },
-    {
-        title: "Full stack Developer",
-        company_name: "Meta",
-        icon: meta,
-        iconBg: "#a2d2ff",
-        date: "Jan 2023 - Present",
-        points: [
-            "Developing and maintaining web applications using React.js and other related technologies.",
-            "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-            "Implementing responsive design and ensuring cross-browser compatibility.",
-            "Participating in code reviews and providing constructive feedback to other developers.",
-        ],
-    },
+  {
+    title: "Research Assistant",
+    company_name: "Illinois Institute of Technology",
+    icon: ILTECH,
+    iconBg: "#a2d2ff",
+    date: "Jan 2026 - Present",
+    points: [
+      "Built and evaluated Python and PyTorch machine learning pipelines across multiple experiments, comparing metrics, runtime behavior, and output quality to support model selection.",
+      "Automated data preparation, experiment execution, and result aggregation with Python scripts, improving reproducibility and reducing manual validation across runs.",
+      "Investigated preprocessing, configuration, and model-pipeline issues while documenting repeatable execution steps for follow-up experimentation and debugging.",
+    ],
+  },
+  {
+    title: "Teaching Assistant",
+    company_name: "Illinois Institute of Technology",
+    icon: ILTECH,
+    iconBg: "#d9ed92",
+    date: "Sep 2025 - Dec 2025",
+    points: [
+      "Managed labs, grading, and office hours for graduate Cryptography and Security courses while helping students solve analytical and debugging problems.",
+      "Supported structured evaluation across assignments and communicated technical feedback clearly, strengthening classroom operations and student outcomes.",
+    ],
+  },
+  {
+    title: "Software Engineer / ML Engineer",
+    company_name: "Barodaweb",
+    icon: web,
+    iconBg: "#0077cb",
+    date: "Jun 2024 - Dec 2024",
+    points: [
+      "Worked on a camera-enabled advertising platform using Python and data-driven validation workflows to analyze operational logs, identify performance trends, and support troubleshooting.",
+      "Built internal scripts and reporting workflows to summarize recurring issues, improve testing efficiency, and provide actionable insights to engineering and business teams.",
+    ],
+  },
+  {
+    title: "Software Engineer Intern",
+    company_name: "VMC",
+    icon: download,
+    iconBg: "#accbe1",
+    date: "Mar 2024 - May 2024",
+    points: [
+      "Worked with C# and .NET to improve an online ticketing platform by analyzing workflow issues, increasing application reliability, and reducing recurring client support requests by 20%.",
+      "Supported rollout and troubleshooting, documented validation steps and issue patterns, and helped reduce repeat issue occurrences by 15%.",
+    ],
+  },
 ];
 
 export const socialLinks = [
-    {
-        name: 'Contact',
-        iconUrl: contact,
-        link: '/contact',
-    },
-    {
-        name: 'GitHub',
-        iconUrl: github,
-        link: 'https://github.com/YourGitHubUsername',
-    },
-    {
-        name: 'LinkedIn',
-        iconUrl: linkedin,
-        link: 'https://www.linkedin.com/in/YourLinkedInUsername',
-    }
+  {
+    name: "Contact",
+    iconUrl: contact,
+    link: "/contact",
+  },
+  {
+    name: "GitHub",
+    iconUrl: github,
+    link: "https://github.com/hetptl1433",
+  },
+  {
+    name: "LinkedIn",
+    iconUrl: linkedin,
+    link: "https://linkedin.com/in/hetptldev",
+  },
 ];
 
 export const projects = [
-    {
-        iconUrl: pricewise,
-        theme: 'btn-back-red',
-        name: 'Amazon Price Tracker',
-        description: 'Developed a web application that tracks and notifies users of price changes for products on Amazon, helping users find the best deals.',
-        link: 'https://github.com/adrianhajdin/pricewise',
-    },
-    {
-        iconUrl: threads,
-        theme: 'btn-back-green',
-        name: 'Full Stack Threads Clone',
-        description: 'Created a full-stack replica of the popular discussion platform "Threads," enabling users to post and engage in threaded conversations.',
-        link: 'https://github.com/adrianhajdin/threads',
-    },
-    {
-        iconUrl: car,
-        theme: 'btn-back-blue',
-        name: 'Car Finding App',
-        description: 'Designed and built a mobile app for finding and comparing cars on the market, streamlining the car-buying process.',
-        link: 'https://github.com/adrianhajdin/project_next13_car_showcase',
-    },
-    {
-        iconUrl: snapgram,
-        theme: 'btn-back-pink',
-        name: 'Full Stack Instagram Clone',
-        description: 'Built a complete clone of Instagram, allowing users to share photos and connect with friends in a familiar social media environment.',
-        link: 'https://github.com/adrianhajdin/social_media_app',
-    },
-    {
-        iconUrl: estate,
-        theme: 'btn-back-black',
-        name: 'Real-Estate Application',
-        description: 'Developed a web application for real estate listings, facilitating property searches and connecting buyers with sellers.',
-        link: 'https://github.com/adrianhajdin/projects_realestate',
-    },
-    {
-        iconUrl: summiz,
-        theme: 'btn-back-yellow',
-        name: 'AI Summarizer Application',
-        description: 'App that leverages AI to automatically generate concise & informative summaries from lengthy text content, or blogs.',
-        link: 'https://github.com/adrianhajdin/project_ai_summarizer',
-    }
+  {
+    iconUrl: pricewise,
+    theme: "btn-back-green",
+    name: "CryptexLLM",
+    description:
+      "Built an LLM-powered BTC forecasting pipeline using OHLCV market data, patch-based tokenization, RevIN normalization, and direction-aware losses, then validated it with walk-forward testing under trading fees.",
+  },
+  {
+    iconUrl: summiz,
+    theme: "btn-back-yellow",
+    name: "Credit Card Fraud Detection Using Transformer",
+    description:
+      "Built FT-Transformer fraud detection models in PyTorch on 284,807 transactions and improved results with feature-gated token weighting, boosting ROC-AUC while reducing test loss.",
+  },
+  {
+    iconUrl: estate,
+    theme: "btn-back-black",
+    name: "Real-Estate Management",
+    description:
+      "Built a parcel management app with React, Mapbox GL, and GraphQL to visualize land records, support search and filter workflows, and improve maintainability over ad-hoc REST calls.",
+    link: "https://real-estate-olive-six.vercel.app/",
+    linkLabel: "Live Project",
+  },
+  {
+    iconUrl: threads,
+    theme: "btn-back-blue",
+    name: "E-Motel",
+    description:
+      "Built a MERN motel management platform with Tailwind CSS, Socket.IO, Vercel, and AWS to manage rooms, bookings, customer records, and staff operations in real time.",
+    link: "https://e-motel-front-git-main-hetptl1433s-projects.vercel.app/",
+    linkLabel: "Live Project",
+  },
 ];

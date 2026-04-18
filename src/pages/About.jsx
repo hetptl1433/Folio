@@ -4,7 +4,7 @@ import {
 } from "react-vertical-timeline-component";
 
 import { CTA } from "../components";
-import { experiences, skills } from "../constants";
+import { education, experiences, skillCategories, skills } from "../constants";
 
 import "react-vertical-timeline-component/style.min.css";
 
@@ -12,54 +12,105 @@ export const About = () => {
   return (
     <section className='max-container'>
       <h1 className='head-text'>
-        Hello, I'm{" "}
-        <span className='blue-gradient_text font-semibold drop-shadow'>
-          {" "}
-          Het
-        </span>{" "}
-        👋
+        Hello, I&apos;m{" "}
+        <span className='blue-gradient_text font-semibold drop-shadow'>Het</span>
       </h1>
 
-      <div className='mt-5 flex flex-col gap-3 text-slate-500'>
+      <div className='mt-5 flex max-w-3xl flex-col gap-3 text-slate-600 leading-relaxed'>
         <p>
-          Software Engineer based in Croatia, specializing in technical
-          education through hands-on learning and building applications.
+          I&apos;m a software and machine learning engineer with experience across
+          research workflows, technical instruction, and full-stack product
+          development.
+        </p>
+        <p>
+          My recent work spans Python and PyTorch experimentation, teaching
+          graduate cryptography labs, and building production-facing web
+          applications with React, Node.js, and MongoDB.
         </p>
       </div>
 
-      <div className='py-10 flex flex-col'>
-        <h3 className='subhead-text'>My Skills</h3>
+      <div className='py-10'>
+        <h3 className='subhead-text'>Education</h3>
 
-        <div className='mt-16 flex flex-wrap gap-12'>
+        <div className='mt-8 grid gap-6 md:grid-cols-2'>
+          {education.map((item) => (
+            <div
+              key={item.school}
+              className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'
+            >
+              <p className='text-sm font-semibold uppercase tracking-[0.2em] text-sky-600'>
+                {item.date}
+              </p>
+              <h4 className='mt-3 text-xl font-poppins font-semibold text-slate-900'>
+                {item.school}
+              </h4>
+              <p className='mt-2 text-slate-700'>{item.degree}</p>
+              <p className='mt-1 text-sm text-slate-500'>{item.location}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className='py-10 flex flex-col'>
+        <h3 className='subhead-text'>Selected Stack</h3>
+
+        <div className='mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-4'>
           {skills.map((skill) => (
-            <div className='block-container w-20 h-20' key={skill.name}>
-              <div className='btn-back rounded-xl' />
-              <div className='btn-front rounded-xl flex justify-center items-center'>
-                <img
-                  src={skill.imageUrl}
-                  alt={skill.name}
-                  className='w-1/2 h-1/2 object-contain'
-                />
+            <div key={skill.name} className='flex flex-col items-center text-center'>
+              <div className='block-container h-20 w-20'>
+                <div className='btn-back rounded-xl' />
+                <div className='btn-front rounded-xl flex justify-center items-center'>
+                  <img
+                    src={skill.imageUrl}
+                    alt={skill.name}
+                    className='h-1/2 w-1/2 object-contain'
+                  />
+                </div>
               </div>
+              <p className='mt-5 font-poppins font-semibold text-slate-900'>
+                {skill.name}
+              </p>
+              <p className='text-sm text-slate-500'>{skill.type}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className='py-10'>
+        <h3 className='subhead-text'>Core Skills</h3>
+
+        <div className='mt-8 grid gap-5 md:grid-cols-2'>
+          {skillCategories.map((category) => (
+            <div
+              key={category.title}
+              className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'
+            >
+              <h4 className='text-lg font-poppins font-semibold text-slate-900'>
+                {category.title}
+              </h4>
+              <p className='mt-3 leading-relaxed text-slate-600'>
+                {category.items.join(" | ")}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
       <div className='py-16'>
-        <h3 className='subhead-text'>Work Experience.</h3>
-        <div className='mt-5 flex flex-col gap-3 text-slate-500'>
+        <h3 className='subhead-text'>Experience</h3>
+        <div className='mt-5 max-w-3xl text-slate-600'>
           <p>
-            I've worked with all sorts of companies, leveling up my skills and
-            teaming up with smart people. Here's the rundown:
+            The recent timeline below matches the roles highlighted on my resume,
+            from applied ML research and graduate teaching to production web and
+            platform engineering.
           </p>
         </div>
 
         <div className='mt-12 flex'>
           <VerticalTimeline>
-            {experiences.map((experience, index) => (
+            {experiences.map((experience) => (
               <VerticalTimelineElement
-                key={experience.company_name}
+                key={`${experience.company_name}-${experience.title}`}
                 date={experience.date}
                 iconStyle={{ background: experience.iconBg }}
                 icon={
@@ -67,7 +118,7 @@ export const About = () => {
                     <img
                       src={experience.icon}
                       alt={experience.company_name}
-                      className='w-[60%] h-[60%] object-contain'
+                      className='h-[60%] w-[60%] object-contain'
                     />
                   </div>
                 }
@@ -79,22 +130,22 @@ export const About = () => {
                 }}
               >
                 <div>
-                  <h3 className='text-black text-xl font-poppins font-semibold'>
+                  <h3 className='font-poppins text-xl font-semibold text-black'>
                     {experience.title}
                   </h3>
                   <p
-                    className='text-black-500 font-medium text-base'
+                    className='text-base font-medium text-black-500'
                     style={{ margin: 0 }}
                   >
                     {experience.company_name}
                   </p>
                 </div>
 
-                <ul className='my-5 list-disc ml-5 space-y-2'>
+                <ul className='my-5 ml-5 list-disc space-y-2'>
                   {experience.points.map((point, index) => (
                     <li
                       key={`experience-point-${index}`}
-                      className='text-black-500/50 font-normal pl-1 text-sm'
+                      className='pl-1 text-sm font-normal text-black-500/70'
                     >
                       {point}
                     </li>

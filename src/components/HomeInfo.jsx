@@ -1,34 +1,51 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import {arrow } from '../assets/icons'
-const InfoBox = ({text, link, btnText}) => {
-    return (
-        <div className="info-box">
-            <p className='font-medium sm:text-xl text-center'>{text}</p>
-            <Link to={link}  className='neo-brutalism-white neo-btn '>{btnText} <img src={arrow} alt='' className='w-4 h-4 object-contain' /></Link>
-        </div>
-    );
+import { Link } from "react-router-dom";
+import { arrow } from "../assets/icons";
+
+const InfoBox = ({ text, link, btnText }) => {
+  return (
+    <div className='info-box'>
+      <p className='text-center font-medium sm:text-xl'>{text}</p>
+      <Link to={link} className='neo-brutalism-white neo-btn'>
+        {btnText}
+        <img src={arrow} alt='' className='h-4 w-4 object-contain' />
+      </Link>
+    </div>
+  );
 };
- const renderContent = {
-        1: (
-           <h1 className='sm:text-xl sm:leading-snug text-center neo-brutalism-blue py-4 px-8 text-white mx-5' >Hi, I am <span className='font-semibold'>Het</span> 👋<br/>I turn ideas into polished web apps with modern tooling.</h1>
-        ),
-        2: (
-            <InfoBox text={"Built products across several teams—bringing experience in React, 3D, AI features, and full‑stack delivery"} link={'/about'} btnText={'Learn More'}/>
-        ),
-        3: (
-          <InfoBox text={"Led multiple projects from prototype to launch—shipping with React, 3D, and AI tooling"} link={'/Projects'} btnText={'Visit portfolio'}/>
 
-        ),
-        4: (
-                        <InfoBox text={"Need a project done or loooking for dev? ping me"} link={'/contact'} btnText={"Let's talk"}/>
+const renderContent = {
+  1: (
+    <h1 className='neo-brutalism-blue mx-5 px-8 py-4 text-center text-white sm:text-xl sm:leading-snug'>
+      Hi, I&apos;m <span className='font-semibold'>Het</span>.
+      <br />
+      I build machine learning systems and full-stack web products.
+    </h1>
+  ),
+  2: (
+    <InfoBox
+      text='Recent experience includes ML research, graduate teaching, and production-facing application development.'
+      link='/about'
+      btnText='About me'
+    />
+  ),
+  3: (
+    <InfoBox
+      text='Current portfolio projects span BTC forecasting, fraud detection, geospatial tooling, and real-time operations software.'
+      link='/projects'
+      btnText='View projects'
+    />
+  ),
+  4: (
+    <InfoBox
+      text="Hiring for software, ML, or research-oriented engineering work? Let's talk."
+      link='/contact'
+      btnText='Contact me'
+    />
+  ),
+};
 
-        ),
-    }
-export const HomeInfo = ({currentStage}) => {
-   
+export const HomeInfo = ({ currentStage }) => {
   return renderContent[currentStage] || null;
-}
-
+};
 
 export default HomeInfo;
