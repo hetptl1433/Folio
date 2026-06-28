@@ -1,165 +1,127 @@
 import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
+  aboutIntro,
+  aboutStrands,
+  education,
+  focusAreas,
+  profile,
+  skillCategories,
+} from "../constants";
 
-import { CTA } from "../components";
-import { education, experiences, skillCategories, skills } from "../constants";
-
-import "react-vertical-timeline-component/style.min.css";
+const aText = { violet: "text-violet", teal: "text-teal", ember: "text-ember" };
+const aChip = {
+  violet: "tag-chip-violet",
+  teal: "tag-chip-teal",
+  ember: "tag-chip-ember",
+};
+const aBorder = {
+  violet: "border-violet/40",
+  teal: "border-teal/40",
+  ember: "border-ember/40",
+};
+const aDot = { violet: "bg-violet", teal: "bg-teal", ember: "bg-ember" };
 
 export const About = () => {
   return (
-    <section className='max-container'>
-      <h1 className='head-text'>
-        Hello, I&apos;m{" "}
-        <span className='blue-gradient_text font-semibold drop-shadow'>Het</span>
-      </h1>
-
-      <div className='mt-5 flex max-w-3xl flex-col gap-3 text-slate-600 leading-relaxed'>
-        <p>
-          I&apos;m a software and machine learning engineer with experience across
-          research workflows, technical instruction, and full-stack product
-          development.
-        </p>
-        <p>
-          My recent work spans Python and PyTorch experimentation, teaching
-          graduate cryptography labs, and building production-facing web
-          applications with React, Node.js, and MongoDB.
-        </p>
-      </div>
-
-      <div className='py-10'>
-        <h3 className='subhead-text'>Education</h3>
-
-        <div className='mt-8 grid gap-6 md:grid-cols-2'>
-          {education.map((item) => (
-            <div
-              key={item.school}
-              className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'
-            >
-              <p className='text-sm font-semibold uppercase tracking-[0.2em] text-sky-600'>
-                {item.date}
+    <section className="min-h-screen flex flex-col">
+      <main className="flex-grow pt-28 md:pt-32 pb-stack-lg px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto flex flex-col gap-stack-lg">
+        <header className="max-w-3xl reveal-element is-revealed">
+          <p className="section-kicker text-violet mb-5">~/ about</p>
+          <h1 className="font-display text-display leading-[0.95]">
+            About the <span className="text-violet-grad">work</span>
+          </h1>
+          <div className="mt-6 space-y-4">
+            {aboutIntro.map((p) => (
+              <p key={p} className="section-copy">
+                {p}
               </p>
-              <h4 className='mt-3 text-xl font-poppins font-semibold text-slate-900'>
-                {item.school}
-              </h4>
-              <p className='mt-2 text-slate-700'>{item.degree}</p>
-              <p className='mt-1 text-sm text-slate-500'>{item.location}</p>
-            </div>
+            ))}
+          </div>
+        </header>
+
+        {/* two strands */}
+        <section className="grid md:grid-cols-2 gap-gutter">
+          {aboutStrands.map((s, i) => (
+            <article
+              key={s.key}
+              className={`panel p-7 lift-hover reveal-element border-l-2 ${aBorder[s.accent]}`}
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
+              <p className={`font-mono text-[11px] uppercase tracking-[0.22em] ${aText[s.accent]}`}>
+                strand_{i + 1}
+              </p>
+              <h2 className="mt-2 font-display text-2xl text-text">{s.title}</h2>
+              <p className="mt-3 text-text-dim leading-relaxed">{s.text}</p>
+            </article>
           ))}
-        </div>
-      </div>
+        </section>
 
-      <div className='py-10 flex flex-col'>
-        <h3 className='subhead-text'>Selected Stack</h3>
-
-        <div className='mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-4'>
-          {skills.map((skill) => (
-            <div key={skill.name} className='flex flex-col items-center text-center'>
-              <div className='block-container h-20 w-20'>
-                <div className='btn-back rounded-xl' />
-                <div className='btn-front rounded-xl flex justify-center items-center'>
-                  <img
-                    src={skill.imageUrl}
-                    alt={skill.name}
-                    className='h-1/2 w-1/2 object-contain'
-                  />
-                </div>
+        {/* focus areas */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          {focusAreas.map((area, i) => (
+            <article
+              key={area.title}
+              className={`panel p-6 lift-hover reveal-element border-t-2 ${aBorder[area.accent]}`}
+              style={{ transitionDelay: `${i * 70}ms` }}
+            >
+              <h2 className={`font-display text-lg ${aText[area.accent]}`}>{area.title}</h2>
+              <p className="mt-3 text-sm text-text-dim leading-relaxed">{area.description}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {area.points.map((point) => (
+                  <span key={point} className={`tag-chip ${aChip[area.accent]}`}>
+                    {point}
+                  </span>
+                ))}
               </div>
-              <p className='mt-5 font-poppins font-semibold text-slate-900'>
-                {skill.name}
-              </p>
-              <p className='text-sm text-slate-500'>{skill.type}</p>
-            </div>
+            </article>
           ))}
-        </div>
-      </div>
+        </section>
 
-      <div className='py-10'>
-        <h3 className='subhead-text'>Core Skills</h3>
-
-        <div className='mt-8 grid gap-5 md:grid-cols-2'>
-          {skillCategories.map((category) => (
-            <div
-              key={category.title}
-              className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'
-            >
-              <h4 className='text-lg font-poppins font-semibold text-slate-900'>
-                {category.title}
-              </h4>
-              <p className='mt-3 leading-relaxed text-slate-600'>
-                {category.items.join(" | ")}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className='py-16'>
-        <h3 className='subhead-text'>Experience</h3>
-        <div className='mt-5 max-w-3xl text-slate-600'>
-          <p>
-            The recent timeline below matches the roles highlighted on my resume,
-            from applied ML research and graduate teaching to production web and
-            platform engineering.
-          </p>
-        </div>
-
-        <div className='mt-12 flex'>
-          <VerticalTimeline>
-            {experiences.map((experience) => (
-              <VerticalTimelineElement
-                key={`${experience.company_name}-${experience.title}`}
-                date={experience.date}
-                iconStyle={{ background: experience.iconBg }}
-                icon={
-                  <div className='flex justify-center items-center w-full h-full'>
-                    <img
-                      src={experience.icon}
-                      alt={experience.company_name}
-                      className='h-[60%] w-[60%] object-contain'
-                    />
-                  </div>
-                }
-                contentStyle={{
-                  borderBottom: "8px",
-                  borderStyle: "solid",
-                  borderBottomColor: experience.iconBg,
-                  boxShadow: "none",
-                }}
-              >
-                <div>
-                  <h3 className='font-poppins text-xl font-semibold text-black'>
-                    {experience.title}
+        {/* education + core stack */}
+        <section className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-gutter">
+          <article className="panel p-7 reveal-element">
+            <h2 className="font-display text-xl text-text mb-6">Education</h2>
+            <div className="space-y-4">
+              {education.map((item) => (
+                <div
+                  key={item.school}
+                  className="relative pl-5 border-l border-hairline"
+                >
+                  <span
+                    className={`absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full ${aDot[item.accent]}`}
+                  />
+                  <h3 className={`font-display text-base ${aText[item.accent]}`}>
+                    {item.school}
                   </h3>
-                  <p
-                    className='text-base font-medium text-black-500'
-                    style={{ margin: 0 }}
-                  >
-                    {experience.company_name}
+                  <p className="text-text mt-1 text-sm">{item.degree}</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-faint mt-1">
+                    {item.location} · {item.date}
                   </p>
                 </div>
+              ))}
+            </div>
+          </article>
 
-                <ul className='my-5 ml-5 list-disc space-y-2'>
-                  {experience.points.map((point, index) => (
-                    <li
-                      key={`experience-point-${index}`}
-                      className='pl-1 text-sm font-normal text-black-500/70'
-                    >
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </VerticalTimelineElement>
-            ))}
-          </VerticalTimeline>
-        </div>
-      </div>
-
-      <hr className='border-slate-200' />
-
-      <CTA />
+          <article className="panel p-7 reveal-element">
+            <h2 className="font-display text-xl text-text mb-6">Core Stack</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {skillCategories.map((category) => (
+                <div key={category.title}>
+                  <h3 className={`font-mono text-[11px] uppercase tracking-[0.2em] mb-3 ${aText[category.accent]}`}>
+                    {category.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {category.items.map((item) => (
+                      <span key={item} className="tag-chip">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+        </section>
+      </main>
     </section>
   );
 };

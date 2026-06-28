@@ -1,104 +1,177 @@
-import React, {useState, useRef, Suspense} from 'react'
-import emailjs from '@emailjs/browser';
-import { Canvas } from '@react-three/fiber';
-import  Fox  from '../models/Fox';
-import { Loader } from '../components/Loader';
-import { useAlert } from '../hooks/useAlert';
-import { Alert } from '../components/Alert';
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+
+import { Alert } from "../components";
+import { contactHighlights, contactMethods, profile } from "../constants";
+import { useAlert } from "../hooks/useAlert";
+
+const inputClass =
+  "mt-3 w-full rounded-xl border border-hairline bg-surface-2 px-4 py-3 text-text font-body placeholder:text-text-faint focus:border-ember focus:outline-none transition-colors";
+
 export const Contact = () => {
-  const [currentAnimation, setCurrentAnimation]= useState('idle');
-  const formref = useRef(null);
-  const [isloading, setIsloading] = useState(false);
-  const {alert, showAlert, hideAlert} = useAlert();
-  const [form, setForm] = React.useState({
-    name: '',
-    email: '',
-    message: '',
-  })
+  const formRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { alert, showAlert, hideAlert } = useAlert();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const onsubmit = (e) => {
-    e.preventDefault();
-    setIsloading(true);
-    setCurrentAnimation('hit');
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
 
-    emailjs.send( 
-      import.meta.env.VITE_APP_EMAILJS_SERVICE_ID, 
-      import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID, 
-      {
-        from_name: form.name,
-        to_name: 'Het Patel', 
-        from_email: form.email,
-        to_email: 'hetptl143324@gmail.com', 
-        message: form.message,  
-      },
-      import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-    ).then(() => {
-      setIsloading(false);
-      showAlert('success', 'Thank you. I will get back to you as soon as possible.');
+    emailjs
+      .send(
+        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          to_name: "Het Patel",
+          from_email: form.email,
+          to_email: "hetptl143324@gmail.com",
+          message: form.message,
+        },
+        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        () => {
+          setIsLoading(false);
+          showAlert("success", "Thank you. I will get back to you as soon as possible.");
 
-      setTimeout(() => {
-      hideAlert();
-        setCurrentAnimation('idle');
+          setTimeout(() => {
+            hideAlert();
+            setForm({ name: "", email: "", message: "" });
+          }, 3000);
+        },
+        () => {
+          setIsLoading(false);
+          showAlert("danger", "Something went wrong. Please try again.");
+        }
+      );
+  };
 
-      setForm({
-        name: '',
-        email: '',
-        message: '',
-      })
-      }, 3000);
-      
-    }, (error) => {
-      setIsloading(false);
-      setCurrentAnimation('idle');
-      console.log(error);
-      showAlert('danger', 'Ahh, something went wrong. Please try again.');
-    });
-  }
+  const handleChange = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
+  };
 
-  const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value});
-  }
-  const handlefocus = (e) => {
-    setCurrentAnimation('walk');
-  }
-  const handleblur = (e) => {
-    setCurrentAnimation('Idle');
-  }
   return (
-    
+    <section className="min-h-screen flex flex-col">
+      {alert.show ? <Alert {...alert} /> : null}
 
-    <section className='relative flex lg:flex-row flex-col max-container'>
-      {alert.show && <Alert {...alert} />}
-      <div className='flex-1 min-w-[50%] flex flex-col'>
-        <h1 className='head-text'>Get in Touch</h1>
-        <form className='w-full flex flex-col gap-7 mt-14' ref={formref} onSubmit={onsubmit}>
-          <label className=" text-black-500 font-semibold">
-            Name
-            <input type="text" name="name" className="input" placeholder="Your Name" required value={form.name} onChange={handleChange} onFocus={handlefocus} onBlur={handleblur}/>
-          </label>
-          <label className=" text-black-500 font-semibold">
-            Email
-            <input type="email" name="email" className="input" placeholder="Your Email" required value={form.email} onChange={handleChange} onFocus={handlefocus} onBlur={handleblur}/>
-          </label>
-          <label className=" text-black-500 font-semibold">
-            Message
-            <textarea name="message" rows={4} className="input resize-none" placeholder="Your Message" required value={form.message} onChange={handleChange} onFocus={handlefocus} onBlur={handleblur}/>
-          </label>
-          <button type="submit" className='btn ' disabled={isloading}>{isloading ? "Sending" : "Send Message"}</button> 
-        </form>
-      </div>
-      <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
-      <Canvas camera={{position: [0, 0, 5], fov: 75, near: 0.1, far:1000 }}>
-        <directionalLight position={[0,0,1]} intensity={2.5}/>
-        <ambientLight intensity={0.5}/>
-        <Suspense fallback={<Loader/>}> 
-          <Fox position={[0.5, 0.35, 0]}
-          currentAnimation={currentAnimation}
-          rotation={[12.6, -0.6, 0]}
-          scale={[0.5,0.5,0.5]}/>
-        </Suspense>
-        </Canvas>
-      </div>
+      <main className="flex-grow pt-28 md:pt-32 pb-stack-lg px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto flex flex-col gap-stack-lg">
+        <header className="max-w-3xl reveal-element is-revealed">
+          <p className="section-kicker text-ember mb-5">het@latent-space:~$ ./contact.sh</p>
+          <h1 className="font-display text-display leading-[0.95]">
+            Get in <span className="text-ember-grad">touch</span>
+          </h1>
+          <p className="mt-6 section-copy">
+            I&apos;m open to software engineering, ML engineering, and research-oriented
+            roles. Whether you have a question or a project in mind, the channels below
+            reach me directly.
+          </p>
+        </header>
+
+        <section className="grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-gutter">
+          <div className="space-y-6">
+            <div className="panel p-7">
+              <h2 className="font-display text-xl text-text mb-6">Direct Channels</h2>
+              <div className="grid gap-3">
+                {contactMethods.map((method) =>
+                  method.href ? (
+                    <a
+                      key={method.label}
+                      className="bg-surface-2 border border-hairline rounded-xl p-4 transition-colors hover:border-ember/40 block"
+                      href={method.href}
+                      rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      target={method.href.startsWith("http") ? "_blank" : undefined}
+                    >
+                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ember">
+                        {method.label}
+                      </p>
+                      <p className="text-text mt-1.5">{method.value}</p>
+                    </a>
+                  ) : (
+                    <div
+                      key={method.label}
+                      className="bg-surface-2 border border-hairline rounded-xl p-4"
+                    >
+                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-teal">
+                        {method.label}
+                      </p>
+                      <p className="text-text mt-1.5">{method.value}</p>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-4">
+              {contactHighlights.map((item) => (
+                <div key={item.title} className="panel p-5">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-violet">
+                    {item.title}
+                  </p>
+                  <p className="text-text-dim mt-3 text-sm leading-relaxed">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel-strong p-7 md:p-9">
+            <h2 className="font-display text-xl text-text mb-2">Send a Note</h2>
+            <p className="text-text-dim text-sm">
+              Goes straight to my inbox at {profile.email}.
+            </p>
+
+            <form ref={formRef} onSubmit={onSubmit} className="mt-8 flex flex-col gap-6">
+              <label className="font-mono text-[12px] uppercase tracking-[0.16em] text-text-dim">
+                Name
+                <input
+                  className={inputClass}
+                  name="name"
+                  onChange={handleChange}
+                  placeholder="Your name"
+                  required
+                  type="text"
+                  value={form.name}
+                />
+              </label>
+
+              <label className="font-mono text-[12px] uppercase tracking-[0.16em] text-text-dim">
+                Email
+                <input
+                  className={inputClass}
+                  name="email"
+                  onChange={handleChange}
+                  placeholder="you@company.com"
+                  required
+                  type="email"
+                  value={form.email}
+                />
+              </label>
+
+              <label className="font-mono text-[12px] uppercase tracking-[0.16em] text-text-dim">
+                Message
+                <textarea
+                  className={`${inputClass} min-h-[180px] resize-none`}
+                  name="message"
+                  onChange={handleChange}
+                  placeholder="Tell me about the role, team, or project."
+                  required
+                  rows={7}
+                  value={form.message}
+                />
+              </label>
+
+              <button
+                className="btn-ember w-full sm:w-fit disabled:opacity-60"
+                disabled={isLoading}
+                type="submit"
+              >
+                {isLoading ? "Sending…" : "Send Message ↗"}
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
     </section>
-  )
-}
+  );
+};
