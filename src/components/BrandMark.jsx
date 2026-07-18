@@ -14,7 +14,7 @@ export const BrandMark = ({ variant = "mark" }) => {
           <path
             className="brand-mark__h"
             fill="currentColor"
-            d="M7.75 5.5h5.5v15.25h8.5v7.5h-8.5V41.5H5.5V7.75A2.25 2.25 0 0 1 7.75 5.5Z"
+            d="M7.75 5.5h5.5v15.25h9.25v7.5h-9.25V41.5H5.5V7.75A2.25 2.25 0 0 1 7.75 5.5Z"
           />
           <path
             className="brand-mark__flight"

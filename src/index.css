@@ -314,7 +314,6 @@ body {
   .btn:hover::after, .shine:hover::after { left: -120%; }
   .block-container:hover > .btn-back { transform: rotateZ(15deg); }
   .block-container:hover > .btn-front { transform: none; }
-  .brand-link:hover .brand-mark__flight { transform: none; }
 }
 
 @media (max-width: 639px) {
@@ -725,8 +724,7 @@ body {
 
 .brand-mark__flight {
   fill: var(--folio-blue);
-  transform-origin: 29px 24px;
-  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), fill 240ms ease;
+  transition: fill 240ms ease;
 }
 
 .brand-wordmark {
@@ -783,7 +781,6 @@ body {
 .brand-link:hover .brand-mark__flight,
 .brand-link:focus-visible .brand-mark__flight {
   fill: #075fe0;
-  transform: translate(0.8px, -0.65px);
 }
 
 .brand-link:focus-visible {

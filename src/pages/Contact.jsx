@@ -69,9 +69,9 @@ export const Contact = () => {
         </div>
       )}
 
-      <div className="contact-layout grid items-center gap-8 lg:grid-cols-[minmax(220px,0.72fr)_minmax(0,2fr)] lg:gap-10 xl:gap-14">
+      <div className="contact-layout grid items-center gap-8 lg:grid-cols-[minmax(260px,0.82fr)_minmax(0,2fr)] lg:gap-10 xl:gap-14">
         <header className="contact-intro reveal min-w-0 lg:pb-8">
-          <h1 className="font-poppins text-[clamp(3.25rem,7vw,6.8rem)] font-semibold leading-[0.88] tracking-[-0.07em] text-slate-950">
+          <h1 className="font-poppins text-[clamp(3.25rem,6vw,5.75rem)] font-semibold leading-[0.88] tracking-[-0.07em] text-slate-950">
             Get in
             <span className="mt-3 block bg-gradient-to-r from-sky-400 to-blue-700 bg-clip-text text-transparent">
               Touch
