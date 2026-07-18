@@ -1,22 +1,47 @@
-
-import React, { useRef, useEffect } from 'react'
-import { useGLTF, useAnimations } from '@react-three/drei'
-import scene from '../assets/3d/fox.glb'
+import React, { useRef, useEffect } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
+import scene from "../assets/3d/fox.glb";
 
 export function Fox({ currentAnimation, ...props }) {
   const group = useRef();
+  const prevAction = useRef(null);
   const { nodes, materials, animations } = useGLTF(scene);
   const { actions } = useAnimations(animations, group);
 
-  useEffect(() => { 
-    if (!actions) return;
-    Object.values(actions).forEach((action) => {
-      action.stop();
+  // enable shadows + environment response on the model meshes
+  useEffect(() => {
+    if (!group.current) return;
+    group.current.traverse((o) => {
+      if (o.isMesh || o.isSkinnedMesh) {
+        o.castShadow = true;
+        o.receiveShadow = true;
+        o.frustumCulled = false;
+        if (o.material) {
+          o.material.envMapIntensity = 0.55;
+          o.material.needsUpdate = true;
+        }
+      }
     });
-    if (currentAnimation && actions[currentAnimation]) {
-      actions[currentAnimation].play();
+  }, []);
+
+  // smooth crossfade between idle / walk / hit instead of a hard cut
+  useEffect(() => {
+    if (!actions) return undefined;
+    const next =
+      currentAnimation && actions[currentAnimation] ? actions[currentAnimation] : null;
+    if (!next) return undefined;
+
+    next.reset().fadeIn(0.35).play();
+    if (prevAction.current && prevAction.current !== next) {
+      prevAction.current.fadeOut(0.35);
     }
+    prevAction.current = next;
+
+    return () => {
+      next.fadeOut(0.35);
+    };
   }, [currentAnimation, actions]);
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
@@ -53,10 +78,7 @@ export function Fox({ currentAnimation, ...props }) {
         />
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/fox.glb')
-
-
-export default Fox
+export default Fox;

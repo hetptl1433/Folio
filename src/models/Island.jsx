@@ -6,68 +6,148 @@ Source: https://sketchfab.com/3d-models/foxs-islands-163b68e09fcc47618450150be77
 Title: Fox's islands
 */
 
-import React, { useRef, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { a } from '@react-spring/three'
+import { a as Animated } from '@react-spring/three'
 import islandScene from '../assets/3d/island.glb'
 
-const Island = ({ isRotating, setIsRotating, setCurrentStage, targetStage, setTargetStage, ...props }) => {
+const TARGET_ROTATION_BY_STAGE = {
+  1: 4.5,
+  2: 2.5,
+  3: 1.1,
+  4: 5.65,
+}
+
+const INERTIA_THRESHOLD = 0.0002
+const TWO_PI = 2 * Math.PI
+
+const getSignedAngleDelta = (targetRotation, currentRotation) =>
+  ((((targetRotation - currentRotation + Math.PI) % TWO_PI) + TWO_PI) % TWO_PI) - Math.PI
+
+const getNearestStage = (rotation) => {
+  const normalizedRotation =
+    ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
+
+  return Number(
+    Object.entries(TARGET_ROTATION_BY_STAGE).reduce(
+      (closest, [stage, targetRotation]) => {
+        const distance = Math.abs(getSignedAngleDelta(targetRotation, normalizedRotation))
+        return distance < closest.distance ? { stage, distance } : closest
+      },
+      { stage: 1, distance: Number.POSITIVE_INFINITY },
+    ).stage,
+  )
+}
+
+const Island = ({ setIsRotating, setCurrentStage, targetStage, setTargetStage, reducedMotion, pointerGuardRef, ...props }) => {
     const islandRef = useRef()
-    const {gl, viewport} = useThree()
+    const floatRef = useRef()
+    const draggingRef = useRef(false)
+    const { gl, size } = useThree()
   const { nodes, materials } = useGLTF(islandScene)
+  const islandMaterial = useMemo(() => {
+    const material = materials.PaletteMaterial001.clone()
+    material.emissiveIntensity = 0.25
+    material.envMapIntensity = 0.75
+    material.needsUpdate = true
+    return material
+  }, [materials])
 
   const lastx=useRef(0);
-  const rotationSpeed = useRef(0);
-  const dampingFactor= 0.95;
+  const spinVelocity = useRef(0);
+  const floatClock = useRef(0);
+  const getStageFromRotation = useCallback((rotation) => {
+    const normalizedRotation =
+      ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
 
-  const handlePointerMove = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if(isRotating){
-      
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    if (normalizedRotation >= 5.45 && normalizedRotation <= 5.85) return 4;
+    if (normalizedRotation >= 0.85 && normalizedRotation <= 1.3) return 3;
+    if (normalizedRotation >= 2.4 && normalizedRotation <= 2.6) return 2;
+    if (normalizedRotation >= 4.25 && normalizedRotation <= 4.75) return 1;
+    return null;
+  }, []);
 
-    const delta = (clientX - lastx.current) / viewport.width;
+  const handlePointerMove = useCallback((e) => {
+    if (pointerGuardRef?.current) return;
+    if(draggingRef.current){
 
-    islandRef.current.rotation.y += delta * 0.01 * Math.PI;
+    const clientX = e.clientX;
+    const delta = (clientX - lastx.current) / Math.max(size.width, 1);
+    const rotationDelta = delta * Math.PI * 1.25;
+    islandRef.current.rotation.y += rotationDelta;
+    spinVelocity.current = reducedMotion ? 0 : rotationDelta;
 
     lastx.current = clientX;
-    rotationSpeed.current = delta * 0.01 * Math.PI;
+    setCurrentStage?.(getStageFromRotation(islandRef.current.rotation.y));
   }
-  }
-  const handlePointerUp = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsRotating(false);
+  }, [getStageFromRotation, pointerGuardRef, reducedMotion, setCurrentStage, size.width])
+  const handlePointerUp = useCallback((e) => {
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+    if (pointerGuardRef?.current) {
+      pointerGuardRef.current = false;
+      draggingRef.current = false;
+      spinVelocity.current = 0;
+      setIsRotating(false);
+      return;
+    }
+    draggingRef.current = false;
+    if (reducedMotion) {
+      const nearestStage = getNearestStage(islandRef.current.rotation.y)
+      islandRef.current.rotation.y = TARGET_ROTATION_BY_STAGE[nearestStage]
+      spinVelocity.current = 0;
+      setCurrentStage?.(nearestStage)
+      setIsRotating(false);
+    } else if (Math.abs(spinVelocity.current) <= INERTIA_THRESHOLD) {
+      spinVelocity.current = 0;
+      setTargetStage?.(getNearestStage(islandRef.current.rotation.y))
+      setIsRotating(true);
+    }
 
-  }
+  }, [pointerGuardRef, reducedMotion, setCurrentStage, setIsRotating, setTargetStage])
 
-  const handlePointerDown = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handlePointerDown = useCallback((e) => {
+    if (pointerGuardRef?.current) return;
+    // no stopPropagation/preventDefault here: the bird's click handling needs
+    // these events to reach r3f untouched (touch-action: none covers touch)
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    draggingRef.current = true;
+    setTargetStage?.(null);
     setIsRotating(true);
+    spinVelocity.current = 0;
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    lastx.current = clientX;
-  }
+    lastx.current = e.clientX;
+  }, [pointerGuardRef, setIsRotating, setTargetStage])
 
   useFrame((_, delta) => {
+    // slow breathing bob so the island feels airborne
+    if (floatRef.current) {
+      if (reducedMotion) {
+        floatRef.current.position.y = 0;
+      } else {
+        floatClock.current += delta;
+        floatRef.current.position.y = Math.sin(floatClock.current * 0.5) * 0.35;
+      }
+    }
+
     if (targetStage && islandRef.current) {
-      const targetRotationByStage = {
-        1: 4.5,
-        2: 2.5,
-        3: 1.1,
-        4: 5.65,
-      };
-      const targetRotation = targetRotationByStage[targetStage];
+      spinVelocity.current = 0;
+      const targetRotation = TARGET_ROTATION_BY_STAGE[targetStage];
+
+      if (reducedMotion) {
+        islandRef.current.rotation.y = targetRotation;
+        setCurrentStage?.(targetStage);
+        setTargetStage?.(null);
+        setIsRotating?.(false);
+        return;
+      }
+
       const rotation = islandRef.current.rotation.y;
       const normalizedRotation =
         ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-      const diff =
-        ((targetRotation - normalizedRotation + Math.PI) % (2 * Math.PI)) -
-        Math.PI;
-      const rotationStep = 1.5 * delta;
+      const diff = getSignedAngleDelta(targetRotation, normalizedRotation);
+      // ease-out: fast start, gentle landing, with a floor so it always arrives
+      const rotationStep = Math.max(Math.abs(diff) * 3 * delta, 0.6 * delta);
       islandRef.current.rotation.y +=
         Math.sign(diff) * Math.min(Math.abs(diff), rotationStep);
 
@@ -84,86 +164,85 @@ const Island = ({ isRotating, setIsRotating, setCurrentStage, targetStage, setTa
       return;
     }
 
-    if(isRotating){
-      rotationSpeed.current *= dampingFactor;
-      if (Math.abs(rotationSpeed.current) > 0.001) {
-        rotationSpeed.current= 0;
-
-        islandRef.current.rotation.y += rotationSpeed.current;
-      } else {
-        const rotation = islandRef.current.rotation.y;
-        const normalizedRotation =
-        ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-
-      if (setCurrentStage) {
-        // Set the current stage based on the island's orientation.
-        switch (true) {
-          case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
-            setCurrentStage(4);
-            break;
-          case normalizedRotation >= 0.85 && normalizedRotation <= 1.3:
-            setCurrentStage(3);
-            break;
-          case normalizedRotation >= 2.4 && normalizedRotation <= 2.6:
-            setCurrentStage(2);
-            break;
-          case normalizedRotation >= 4.25 && normalizedRotation <= 4.75:
-            setCurrentStage(1);
-            break;
-          default:
-            setCurrentStage(null);
-        }
-      }
+    // glide with momentum after the pointer lets go
+    if (!draggingRef.current && islandRef.current && Math.abs(spinVelocity.current) > INERTIA_THRESHOLD) {
+      setIsRotating?.(true);
+      spinVelocity.current *= Math.pow(0.93, delta * 60);
+      islandRef.current.rotation.y += spinVelocity.current;
+      setCurrentStage?.(getStageFromRotation(islandRef.current.rotation.y));
+      if (Math.abs(spinVelocity.current) <= INERTIA_THRESHOLD) {
+        spinVelocity.current = 0;
+        setTargetStage?.(getNearestStage(islandRef.current.rotation.y));
+        setIsRotating?.(true);
       }
     }
+
   })
   useEffect(() => {
     const canvas = gl.domElement;
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('pointercancel', handlePointerUp);
     canvas.addEventListener('pointerdown', handlePointerDown);
-    
-    
+
+
     return () => {
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('pointercancel', handlePointerUp);
       canvas.removeEventListener('pointerdown', handlePointerDown);
-    } 
+    }
   }, [gl, handlePointerMove, handlePointerUp, handlePointerDown]);
 
+  useEffect(() => () => islandMaterial.dispose(), [islandMaterial])
+
   return (
-    <a.group ref={islandRef} {...props} dispose={null}>
-      <mesh
-        geometry={nodes.polySurface944_tree_body_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-        geometry={nodes.polySurface945_tree1_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-        geometry={nodes.polySurface946_tree2_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-        geometry={nodes.polySurface947_tree1_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-        geometry={nodes.polySurface948_tree_body_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-       
-        geometry={nodes.polySurface949_tree_body_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-      <mesh
-       
-        geometry={nodes.pCube11_rocks1_0.geometry}
-        material={materials.PaletteMaterial001}
-      />
-    </a.group>
+    <Animated.group ref={islandRef} {...props} dispose={null}>
+      <group ref={floatRef}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface944_tree_body_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface945_tree1_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface946_tree2_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface947_tree1_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface948_tree_body_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.polySurface949_tree_body_0.geometry}
+          material={islandMaterial}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.pCube11_rocks1_0.geometry}
+          material={islandMaterial}
+        />
+      </group>
+    </Animated.group>
   )
 }
 
