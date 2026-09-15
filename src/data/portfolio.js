@@ -6,14 +6,14 @@ export const profile = {
   name: "Het Patel",
   headline: "Software & AI Engineer",
   summary: [
-    "I'm a software engineer who ended up deep in machine learning — and lately, in hardware too. I've done research, taught graduate labs, and built full-stack products, sometimes all in the same semester.",
-    "Right now that means Python and PyTorch experiments, a web-based ML analytics tool fed by lab testing data, and camera-and-sensor pipelines that talk to the cloud — plus web apps built with React, Node.js, and MongoDB that real people use.",
+    "I'm an M.S. in Computer Science student and software engineer building scalable AI/ML, cloud, and customer-facing systems. I work across Python, Java, C#, and TypeScript, with strong foundations in algorithms, distributed services, REST APIs, Microsoft Azure, Microsoft Power Platform, and AWS.",
+    "I'm comfortable owning products from requirements and architecture through deployment, validation, and iteration — whether that means a Next.js analytics dashboard, a multi-GPU forecasting experiment, or a full-stack platform.",
   ],
   focus: [
-    "Machine learning and AI systems",
-    "Embedded/IoT and sensor-to-cloud systems",
+    "AI/ML and time-series forecasting",
+    "Cloud and distributed systems",
     "Full-stack product engineering",
-    "Applied research and reproducible experimentation",
+    "Analytics and workflow automation",
   ],
   opportunities:
     "Open to conversations about software engineering, machine learning, AI, and research-oriented engineering work.",
@@ -45,47 +45,6 @@ export const skillCategories = [
     items: ["Java", "Python", "C++", "C#", "TypeScript", "JavaScript", "SQL", "Go (familiar)"],
   },
   {
-    slug: "embedded-iot",
-    title: "Embedded & IoT",
-    items: [
-      "C++",
-      "Sensors/DAQ",
-      "Camera Integration",
-      "Device-to-Cloud Telemetry",
-      "TCP/IP",
-      "Serial Communication",
-      "Hardware/Software Debugging",
-    ],
-  },
-  {
-    slug: "ml-genai",
-    title: "ML & GenAI",
-    items: [
-      "PyTorch",
-      "TensorFlow",
-      "scikit-learn",
-      "pandas",
-      "NumPy",
-      "Hugging Face Transformers",
-      "LLM Evaluation",
-      "Prompt Engineering",
-    ],
-  },
-  {
-    slug: "cloud-backend",
-    title: "Cloud & Backend",
-    items: [
-      "AWS",
-      "Google Cloud",
-      "Docker",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "SQL & NoSQL",
-      "Socket.IO",
-    ],
-  },
-  {
     slug: "cs-fundamentals",
     title: "CS Fundamentals",
     items: [
@@ -99,41 +58,113 @@ export const skillCategories = [
     ],
   },
   {
+    slug: "cloud-backend",
+    title: "Cloud & Backend",
+    items: [
+      "Microsoft Azure",
+      "Azure App Service",
+      "Azure Load Balancer",
+      "Azure Blob Storage",
+      "Azure Data Lake Storage",
+      "AWS",
+      "Amazon SageMaker",
+      "Google Cloud",
+      ".NET",
+      "Docker",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "SQL & NoSQL",
+      "GraphQL",
+      "Socket.IO",
+      "Microservices",
+      "Microsoft Dynamics 365",
+      "IBM AS/400",
+    ],
+  },
+  {
     slug: "frontend",
     title: "Frontend",
-    items: ["React", "HTML/CSS", "Tailwind CSS"],
+    items: ["React", "Next.js", "HTML/CSS", "Tailwind CSS"],
+  },
+  {
+    slug: "ml-genai",
+    title: "ML & GenAI",
+    items: [
+      "PyTorch",
+      "TensorFlow",
+      "scikit-learn",
+      "pandas",
+      "NumPy",
+      "Hugging Face Transformers",
+      "Llama 3.1",
+      "Qwen2.5",
+      "Kronos",
+      "Time-Series Forecasting",
+      "Computer Vision",
+      "CNNs",
+      "Distributed/Multi-GPU Training",
+      "LLM Evaluation",
+      "OpenAI/Claude API",
+      "Prompt Engineering",
+    ],
   },
   {
     slug: "tools-workflow",
     title: "Tools & Workflow",
-    items: ["Power BI", "Git", "CI/CD", "Linux", "VS Code", "Postman", "Testing", "Technical Documentation", "Debugging", "Automation"],
+    items: [
+      "Microsoft Power BI",
+      "Microsoft Power Automate",
+      "Git",
+      "CI/CD",
+      "Linux",
+      "VS Code",
+      "Postman",
+      "Debugging",
+      "Automation",
+    ],
   },
 ];
 
 export const experienceItems = [
   {
     slug: "dometic",
-    aliases: ["dometic", "product development internship", "engineering internship"],
+    aliases: [
+      "dometic",
+      "product development internship",
+      "engineering internship",
+      "azure dashboard",
+      "power automate",
+      "warranty forecasting",
+    ],
     title: "Engineering Intern (Product Development & QA)",
     company_name: "Dometic",
     date: "May 2026 - Present",
     points: [
-      "Built a web-based analytics tool with machine learning that chews through large volumes of lab testing data and backs real product and quality decisions.",
-      "Cut product-improvement and comparison time by 40%, taking real workload off the lab technicians and the product development team.",
-      "Validated AC/fan software upgrades through systematic testing, reviewing system behavior, data-collection requirements, and field-trial needs to ensure reliable releases.",
-      "Designed monitoring solutions using sensors, data loggers, and DAQ; documented design choices and trade-offs, sourced parts, and supported prototype assembly.",
+      "Built a Next.js AI-powered analytics dashboard, cutting laboratory-data comparison, processing, and analysis time by 70%.",
+      "Deployed the dashboard on Azure App Service with Azure Load Balancer; used Azure Blob Storage for storage and IBM AS/400 and Microsoft Dynamics 365 connectors to ingest data for unified comparison and analytics.",
+      "Built and trained an ML forecasting model on historical data to predict future warranty costs with under 8% error, improving inventory and resource planning.",
+      "Automated employee and project progress tracking with Microsoft Power Automate, streamlining status updates, task follow-ups, and project-management reporting.",
     ],
   },
   {
     slug: "iit-research",
-    aliases: ["research assistant", "ml research", "software ml research"],
+    aliases: [
+      "research assistant",
+      "ml research",
+      "software ml research",
+      "llama 3.1",
+      "qwen2.5",
+      "kronos",
+      "v100 cluster",
+    ],
     title: "Research Assistant (Software/ML Engineering)",
     company_name: "Illinois Institute of Technology",
     date: "Jan 2026 - Present",
     points: [
-      "Built Python/PyTorch pipelines across 5+ prototype variants, benchmarking model quality, runtime behavior, and forecasting metrics to figure out which approaches were worth keeping.",
-      "Automated preprocessing, experiment runs, validation, and result aggregation with reusable Python tooling, so experiments are reproducible instead of hand-run.",
-      "Tracked down and fixed preprocessing and configuration issues in transformer/LLM-based systems, then wrote up the findings and presented them to the team.",
+      "Trained and evaluated Llama 3.1 and Qwen2.5 alongside Kronos, a financial time-series foundation model, and custom CryptexLLM on cryptocurrency data, achieving 58% test directional accuracy.",
+      "Automated data preprocessing, experiment execution, validation, and result aggregation through reusable Python tooling, improving reproducibility and reducing manual effort across repeated runs.",
+      "Ran concurrent large-model training on an 8-GPU NVIDIA Tesla V100 cluster, distributing and load-balancing workloads across devices to accelerate experiments and improve hardware utilization.",
     ],
   },
   {
@@ -143,20 +174,19 @@ export const experienceItems = [
     company_name: "Illinois Institute of Technology",
     date: "Sep 2025 - Jan 2026",
     points: [
-      "Helped 40+ students through labs, grading, and office hours, keeping the feedback clear and the grading fair.",
-      "Reviewed programming assignments for correctness, debugging approach, data structures, documentation, and how clearly students reasoned through problems.",
+      "Supported 40+ students through labs, grading, and office hours, applying consistent evaluation criteria and clear technical feedback.",
+      "Reviewed programming assignments for correctness, debugging approach, data structures, documentation quality, and problem-solving clarity.",
     ],
   },
   {
     slug: "barodaweb",
-    aliases: ["barodaweb", "digital signage", "camera pipeline"],
+    aliases: ["barodaweb", "digital signage", "camera pipeline", "computer vision advertising", "age and gender estimation"],
     title: "Software Engineer",
     company_name: "Barodaweb",
     date: "Jun 2024 - Dec 2024",
     points: [
-      "Built the camera-facing software pipeline for a digital signage platform — image acquisition, image processing, and computer vision working together to estimate viewer attributes in near real time.",
-      "Implemented device-to-backend data capture and configuration flows with React, Node.js, Express, and MongoDB, debugging integration all the way from camera to backend.",
-      "Shipped 10+ reliability fixes through repeated testing and tuning, cutting down production issues across the workflow.",
+      "Built, deployed, and hosted full-stack web features with React, Node.js, Express, and MongoDB, translating customer requirements into solutions for data capture, configuration, and operational workflows.",
+      "Developed a camera-integrated computer vision advertising screen using a CNN-based age-and-gender estimation model to analyze viewers in real time and display personalized advertisements.",
     ],
   },
   {
@@ -166,8 +196,8 @@ export const experienceItems = [
     company_name: "VMC",
     date: "Mar 2024 - May 2024",
     points: [
-      "Debugged workflow defects in C# and .NET, validated the fixes, and documented rollout steps for an online ticketing platform with live users.",
-      "Reproduced production issues, dug down to root causes, and wrote up findings so implementation and QA follow-up moved quickly.",
+      "Modernized a legacy C#/.NET ticketing platform, redesigning customer workflows to reduce required clicks by 30% and improve the user experience.",
+      "Implemented load balancing and performance optimizations, improving peak-traffic stability by 10% and strengthening service reliability.",
     ],
   },
 ];
@@ -175,10 +205,10 @@ export const experienceItems = [
 export const projectItems = [
   {
     slug: "web-analytics-tool",
-    aliases: ["analytics tool", "sales forecasting", "warranty analytics"],
-    name: "Web-Based Analytics Tool",
+    aliases: ["analytics tool", "analytics dashboard", "warranty forecasting", "warranty analytics", "lab analytics"],
+    name: "AI-Powered Analytics Dashboard",
     description:
-      "A web app that uses machine learning to predict sales, warranty claims, and rework cost — and stores test data so trends can be tracked and compared over time instead of decisions running on gut feel.",
+      "A Next.js dashboard that unifies laboratory data from IBM AS/400 and Microsoft Dynamics 365 through Azure services. It cut comparison, processing, and analysis time by 70%, while an ML model forecasts future warranty costs with under 8% error.",
     link: null,
   },
   {
@@ -186,7 +216,7 @@ export const projectItems = [
     aliases: ["cryptex", "crypto forecasting", "market forecaster"],
     name: "CryptexLLM",
     description:
-      "A forecasting pipeline that teaches a frozen LLM to read crypto markets. OHLCV data goes in through patch tokenization and RevIN normalization, a reprogramming head does the translating, and walk-forward evaluation keeps score on MAE, RMSE, directional accuracy, and risk-adjusted returns.",
+      "A scalable crypto time-series forecasting pipeline using OHLCV data, patch-based tokenization, RevIN normalization, and a frozen LLM reprogramming head. Llama 3.1, Qwen2.5, Kronos, and custom CryptexLLM experiments reached 58% test directional accuracy and were validated with walk-forward evaluation.",
     link: null,
   },
   {
@@ -203,7 +233,7 @@ export const projectItems = [
     aliases: ["credit card fraud", "fraud transformer", "ft-transformer"],
     name: "Credit Card Fraud Detection Using Transformer",
     description:
-      "A PyTorch Transformer trained to spot fraud in 284,807 transactions where only 0.17% are fraudulent. The first version reached 0.9643 ROC-AUC; a Feature-Gated FT-Transformer with Conv1D and sigmoid token gating pushed that to 0.9827 and cut test loss from 0.3360 to 0.2758.",
+      "A PyTorch Transformer trained on 284,807 transactions where only 0.17% are fraudulent. The first version reached 0.9643 ROC-AUC, 0.8667 recall, and 0.9929 accuracy; a Feature-Gated FT-Transformer raised ROC-AUC to 0.9827 and cut test loss from 0.3360 to 0.2758.",
     additionalMetrics: {
       recall: 0.8667,
       accuracy: 0.9929,
@@ -222,11 +252,10 @@ export const projectItems = [
 ];
 
 export const highlights = [
-  "Won the MACIA Hackathon with a blockchain payment-processing prototype.",
-  "Built an IoT smart-parking prototype at the HackSVIT hackathon.",
-  "CryptexLLM research manuscript in preparation (LLM-based OHLCV forecasting with RevIN normalization and robustness evaluation).",
-  "Completed AWS Cloud Practitioner Essentials (Cloud 101) and AWS Machine Learning training.",
-  "Served as a Google Cloud Student Facilitator.",
+  "Won the MACIA Hackathon after designing, building, and presenting a blockchain-based payment processing prototype for secure transaction handling and transparent verification.",
+  "CryptexLLM research manuscript in preparation on an LLM-powered time-series forecasting pipeline using OHLCV market data, RevIN normalization, and robustness evaluation across multiple training windows.",
+  "Completed AWS Cloud Practitioner Essentials (Cloud 101), covering cloud concepts, core AWS services, security, architecture, and pricing fundamentals.",
+  "Served as a Google Cloud (GCR) Student Facilitator, leading peer study sessions and supporting hands-on labs and learning paths.",
 ];
 
 export const socialProfiles = [
@@ -237,7 +266,7 @@ export const socialProfiles = [
 
 export const contactDetails = {
   email: "hetptl143324@gmail.com",
-  phoneDisplay: "(574) 336-4929",
+  phoneDisplay: "574-336-4929",
   phoneE164: "+15743364929",
   phoneHref: "tel:+15743364929",
   contactPage: "/contact",
@@ -312,7 +341,7 @@ export const siteDestinations = [...coreDestinations, ...entityDestinations];
 export const siteGuide = {
   title: "Het Patel — Software & AI Engineer",
   description:
-    "An interactive 3D portfolio featuring Het's machine-learning systems, full-stack products, experience, and Sushi, the bird AI guide.",
+    "An interactive 3D portfolio featuring Het's AI/ML, cloud, and full-stack systems, experience, and Sushi, the bird AI guide.",
   routes: [
     { path: "/", purpose: "Interactive 3D home and four-stage introduction" },
     { path: "/about", purpose: "Biography, education, full skill set, and experience timeline" },

@@ -1,20 +1,20 @@
 import { download, logo, web, ILTECH } from "../assets/images";
 import {
   contact,
-  css,
   estate,
   express,
   git,
   github,
-  html,
   javascript,
   linkedin,
   mongodb,
+  nextjs,
   nodejs,
   pricewise,
   react,
   summiz,
   threads,
+  typescript,
 } from "../assets/icons";
 import {
   education,
@@ -31,9 +31,19 @@ export const skills = [
     type: "Programming",
   },
   {
+    imageUrl: typescript,
+    name: "TypeScript",
+    type: "Programming",
+  },
+  {
     imageUrl: react,
     name: "React",
     type: "Frontend",
+  },
+  {
+    imageUrl: nextjs,
+    name: "Next.js",
+    type: "Full Stack",
   },
   {
     imageUrl: nodejs,
@@ -54,16 +64,6 @@ export const skills = [
     imageUrl: git,
     name: "Git",
     type: "Version Control",
-  },
-  {
-    imageUrl: html,
-    name: "HTML",
-    type: "Frontend",
-  },
-  {
-    imageUrl: css,
-    name: "CSS",
-    type: "Frontend",
   },
 ];
 
@@ -105,6 +105,7 @@ export const socialLinks = socialProfiles.map((profileLink) => ({
 }));
 
 const projectPresentation = {
+  "AI-Powered Analytics Dashboard": { iconUrl: summiz, theme: "btn-back-blue" },
   CryptexLLM: { iconUrl: pricewise, theme: "btn-back-green" },
   "Credit Card Fraud Detection Using Transformer": {
     iconUrl: summiz,

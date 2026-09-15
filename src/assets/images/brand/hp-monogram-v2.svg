@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title id="title">Het Patel</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Het Patel monogram concept</title>
+  <desc id="desc">A geometric navy and cobalt monogram combining the letters H and P.</desc>
   <path
     fill="#071633"
     d="M6 6h11v20h16v12H17v20H6V6Z"
@@ -7,7 +8,7 @@
   <path
     fill="#086DF5"
     fill-rule="evenodd"
-    clip-rule="evenodd"
     d="M31 6h15.25C56.65 6 63 12.22 63 22s-6.35 16-16.75 16H42v20H31V34.5l4.75-4.75L31 26V6Zm11 10v12h4.25C50.08 28 52 25.98 52 22s-1.92-6-5.75-6H42Z"
+    clip-rule="evenodd"
   />
 </svg>

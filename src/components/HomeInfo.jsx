@@ -21,22 +21,22 @@ const renderContent = {
   1: (
     <h1 className="neo-brutalism-blue home-intro-title animate-pop mx-4 w-[calc(100vw-2rem)] max-w-2xl text-center text-white sm:mx-5">
       Hi, I&apos;m <span className="font-semibold">Het</span> — I build{" "}
-      <span className="font-semibold">software</span> and{" "}
-      <span className="font-semibold">ML systems</span>.
+      <span className="font-semibold">AI/ML</span>,{" "}
+      <span className="font-semibold">cloud</span>, and software systems.
       <br />
       Welcome to my little island. Have a look around.
     </h1>
   ),
   2: (
     <InfoBox
-      text="These days I'm building AI analytics at Dometic and doing ML research at Illinois Tech. Before that, I shipped software at Barodaweb and VMC."
+      text="These days I'm building a Next.js and Azure AI analytics platform at Dometic while training time-series models at Illinois Tech — including Llama 3.1, Qwen2.5, Kronos, and CryptexLLM."
       link="/about"
       btnText="About me"
     />
   ),
   3: (
     <InfoBox
-      text="I've been building things like an ML analytics tool that forecasts sales and costs, an LLM market forecaster, a fraud detector, and a motel ops platform."
+      text="I've built an AI analytics dashboard, the CryptexLLM market forecaster, a Transformer fraud detector, and the E-Motel operations platform."
       link="/projects"
       btnText="View projects"
     />

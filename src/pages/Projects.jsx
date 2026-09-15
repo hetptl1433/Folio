@@ -144,8 +144,8 @@ export const Projects = () => {
           </h1>
 
           <p className="project-intro-copy mt-4 max-w-3xl text-base leading-7 text-slate-500 reveal sm:text-lg sm:leading-8">
-            Straight off my resume, plus one bonus — from sales forecasting and
-            LLM experiments to fraud detection and apps people actually run
+            Current work and selected projects — from Azure-backed AI analytics
+            and multi-model forecasting to fraud detection and apps people run
             their day on.
           </p>
         </div>
