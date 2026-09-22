@@ -3,7 +3,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 
-import { CTA } from "../components";
+import CTA from "../components/CTA";
 import { education, experiences, skillCategories, skills } from "../constants";
 import { highlights, profile } from "../data/portfolio.js";
 

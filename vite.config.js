@@ -112,9 +112,34 @@ export default defineConfig(({ mode }) => {
       // split the heavy vendor stacks into their own long-cacheable chunks
       rollupOptions: {
         output: {
-          manualChunks: {
-            three: ['three', '@react-three/fiber', '@react-three/drei', '@react-spring/three'],
-            react: ['react', 'react-dom', 'react-router-dom'],
+          onlyExplicitManualChunks: true,
+          manualChunks(id) {
+            if (!id.includes('/node_modules/')) return undefined
+
+            if (
+              id.includes('/node_modules/react/') ||
+              id.includes('/node_modules/react-dom/') ||
+              id.includes('/node_modules/react-router/') ||
+              id.includes('/node_modules/react-router-dom/') ||
+              id.includes('/node_modules/scheduler/')
+            ) {
+              return 'react'
+            }
+            if (id.includes('/node_modules/three/')) return 'three-core'
+            if (id.includes('/node_modules/@react-three/fiber/')) {
+              return 'react-three-fiber'
+            }
+            if (
+              id.includes('/node_modules/@react-three/drei/') ||
+              id.includes('/node_modules/three-stdlib/')
+            ) {
+              return 'react-three-drei'
+            }
+            if (id.includes('/node_modules/@react-spring/')) {
+              return 'react-spring-three'
+            }
+
+            return undefined
           },
         },
       },

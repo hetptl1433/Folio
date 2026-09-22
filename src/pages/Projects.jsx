@@ -1,4 +1,4 @@
-import { CTA } from "../components";
+import CTA from "../components/CTA";
 import { projects } from "../constants";
 import { arrow } from "../assets/icons";
 import cryptexForecasting from "../assets/images/projects/cryptex-forecasting.webp";

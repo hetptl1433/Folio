@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,9 +6,32 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { About, Projects, Contact, Home } from "./pages";
-import { Navbar, Footer, Fx } from "./components";
 import { BirdChat } from "./components/BirdChat";
+import Footer from "./components/Footer";
+import { Fx } from "./components/Fx";
+import { Navbar } from "./components/Navbar";
+
+const Home = lazy(() =>
+  import("./pages/Home").then((module) => ({ default: module.Home }))
+);
+const About = lazy(() =>
+  import("./pages/About").then((module) => ({ default: module.About }))
+);
+const Projects = lazy(() =>
+  import("./pages/Projects").then((module) => ({ default: module.Projects }))
+);
+const Contact = lazy(() =>
+  import("./pages/Contact").then((module) => ({ default: module.Contact }))
+);
+
+const RouteFallback = () => (
+  <div
+    className="grid min-h-screen place-items-center text-sm font-medium text-blue-900/60"
+    role="status"
+  >
+    Loading portfolio…
+  </div>
+);
 
 const ScrollToLocation = () => {
   const { pathname, hash, key } = useLocation();
@@ -93,23 +116,25 @@ const SiteContent = () => {
   return (
     <main className="relative">
       <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              chatOpen={chatOpen}
-              birdPlaying={birdPlaying}
-              onOpenBirdChat={openBirdChat}
-              onPlayBird={playWithBird}
-              onBirdPlayComplete={finishPlayingWithBird}
-            />
-          }
-        />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+      <Suspense fallback={<RouteFallback />}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                chatOpen={chatOpen}
+                birdPlaying={birdPlaying}
+                onOpenBirdChat={openBirdChat}
+                onPlayBird={playWithBird}
+                onBirdPlayComplete={finishPlayingWithBird}
+              />
+            }
+          />
+          <Route path="/about" element={<About />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Suspense>
       {!isHome ? <Footer /> : null}
 
       <div className={isHome ? "pointer-events-none fixed inset-0 z-30" : undefined}>

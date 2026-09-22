@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, Suspense } from "rea
 import * as THREE from "three";
 import { Environment, Lightformer, Sparkles } from "@react-three/drei";
 
+import "../lib/threeAssets.js";
+
 import { Loader } from "../components/Loader";
 import { ThreeCanvas } from "../components/ThreeCanvas";
 import Island from "../models/Island";
@@ -20,6 +22,12 @@ const BIRD_APPROACH_DURATION_SECONDS = 4.5;
 const BIRD_PECK_APPROACH_SECONDS = 2.2;
 const BIRD_APPROACH_WATCHDOG_MS = 15000;
 const BIRD_LOAD_FALLBACK_MS = 20000;
+const PLANE_RIGHT_HEADING = Math.PI / 2;
+
+const getViewportSize = () => ({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
 
 // greet on every page load, but only once per load — surviving route changes
 // within the SPA without re-triggering, and resetting on refresh
@@ -55,6 +63,7 @@ export const Home = ({
   const [isCompactViewport, setIsCompactViewport] = useState(() =>
     window.matchMedia("(max-width: 767px)").matches
   );
+  const [viewportSize, setViewportSize] = useState(getViewportSize);
   const birdLauncherRef = useRef(null);
   const birdPointerActiveRef = useRef(false);
 
@@ -81,6 +90,14 @@ export const Home = ({
     syncViewport();
     mediaQuery.addEventListener("change", syncViewport);
     return () => mediaQuery.removeEventListener("change", syncViewport);
+  }, []);
+
+  useEffect(() => {
+    const syncViewportSize = () => setViewportSize(getViewportSize());
+
+    syncViewportSize();
+    window.addEventListener("resize", syncViewportSize);
+    return () => window.removeEventListener("resize", syncViewportSize);
   }, []);
 
   useEffect(() => {
@@ -220,8 +237,39 @@ export const Home = ({
   const islandRotation = [0.1, 4.7, 0];
   // aims the shadow-casting sun at the island rather than the world origin
   const sunTarget = useMemo(() => new THREE.Object3D(), []);
-  const planeScale = isCompactViewport ? [1.5, 1.5, 1.5] : [3, 3, 3];
-  const planePosition = isCompactViewport ? [0, -1.5, 0] : [0, -4, -4];
+  const flightLayout = viewportSize.width < 600 ? "phone" : "fluid";
+  const heightShortness =
+    1 - THREE.MathUtils.smoothstep(viewportSize.height, 520, 700);
+  const landscapeShortness = THREE.MathUtils.smoothstep(
+    viewportSize.width / Math.max(viewportSize.height, 1),
+    0.85,
+    1.1,
+  );
+  const shortFlightBlend = heightShortness * landscapeShortness;
+  const flightSizeProgress = THREE.MathUtils.clamp(
+    (viewportSize.width - 360) / (1024 - 360),
+    0,
+    1,
+  );
+  const fluidPlaneScale = THREE.MathUtils.lerp(1.2, 3, flightSizeProgress);
+  const shortPlaneScale = THREE.MathUtils.clamp(
+    viewportSize.width * 0.0022,
+    1.55,
+    1.9,
+  );
+  const planeScaleValue = THREE.MathUtils.lerp(
+    fluidPlaneScale,
+    shortPlaneScale,
+    shortFlightBlend,
+  );
+  const planeScale = [planeScaleValue, planeScaleValue, planeScaleValue];
+  const fluidPlaneY = THREE.MathUtils.lerp(-1.5, -4, flightSizeProgress);
+  const fluidPlaneZ = THREE.MathUtils.lerp(0, -4, flightSizeProgress);
+  const planePosition = [
+    0,
+    THREE.MathUtils.lerp(fluidPlaneY, -1.35, shortFlightBlend),
+    THREE.MathUtils.lerp(fluidPlaneZ, -4, shortFlightBlend),
+  ];
 
   return (
     <section id="home" className="home-shell relative h-[100dvh] min-h-[560px] w-full overflow-hidden">
@@ -371,8 +419,11 @@ export const Home = ({
             scale={planeScale}
             position={planePosition}
             isRotating={isRotating || Boolean(targetStage)}
-            rotation={[0, 20, 0]}
+            // The plane leads a left-to-right flyby with the banner trailing behind it.
+            rotation={[0, PLANE_RIGHT_HEADING, 0]}
             reducedMotion={prefersReducedMotion}
+            layout={flightLayout}
+            shortness={shortFlightBlend}
           />
         </Suspense>
       </ThreeCanvas>

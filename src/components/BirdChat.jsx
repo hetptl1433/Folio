@@ -8,9 +8,22 @@ import {
   SUGGESTED_QUESTIONS,
 } from "../lib/birdAI";
 
+const resumeDestination = getSiteDestination("resume.download");
+
 const GREETING = {
   role: "assistant",
-  content: "Hey! I'm Sushi 🐦 Het's bird. I know him and this site inside out, and I'm decent at everything else too. What do you want to know?",
+  content: "Hey! I'm Sushi 🐦 Het's bird. Ask me about his work, or get the full story in his resume.",
+  ...(resumeDestination
+    ? {
+        action: {
+          id: resumeDestination.id,
+          href: resumeDestination.href,
+          label: resumeDestination.label,
+          kind: resumeDestination.kind,
+          fileName: resumeDestination.fileName,
+        },
+      }
+    : {}),
 };
 
 const CHAT_STORAGE_KEY = "sushi-chat-v2";
@@ -24,7 +37,9 @@ const ChatActionLink = ({ action, onInternalNavigate }) => {
   const contents = (
     <>
       <span className="min-w-0 whitespace-normal break-words">{action.label}</span>
-      <span className="shrink-0" aria-hidden="true">→</span>
+      <span className="shrink-0" aria-hidden="true">
+        {action.kind === "download" ? "↓" : "→"}
+      </span>
     </>
   );
 
@@ -40,11 +55,13 @@ const ChatActionLink = ({ action, onInternalNavigate }) => {
     );
   }
 
-  const opensNewTab = /^https?:/i.test(action.href);
+  const isDownload = action.kind === "download";
+  const opensNewTab = !isDownload && /^https?:/i.test(action.href);
   return (
     <a
       href={action.href}
       className={ACTION_LINK_CLASS}
+      download={isDownload ? action.fileName || true : undefined}
       target={opensNewTab ? "_blank" : undefined}
       rel={opensNewTab ? "noopener noreferrer" : undefined}
     >
@@ -86,6 +103,7 @@ const loadSavedMessages = () => {
                   href: destination.href,
                   label: destination.label,
                   kind: destination.kind,
+                  ...(destination.fileName ? { fileName: destination.fileName } : {}),
                 },
               }
             : {}),

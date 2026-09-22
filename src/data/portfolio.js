@@ -275,6 +275,15 @@ export const contactDetails = {
   note: "Visitors can call Het directly or use the Contact page form to send him a message.",
 };
 
+export const resumeDetails = {
+  href: "/resume/Het-Patel-Resume.pdf",
+  fileName: "Het-Patel-Resume.pdf",
+  format: "PDF",
+  label: "Download Het's resume",
+  description:
+    "A concise overview of Het's software engineering, AI/ML, cloud, education, and selected project experience.",
+};
+
 const coreDestinations = [
   { id: "home", href: "/", label: "Explore the 3D island", kind: "internal" },
   { id: "about", href: "/about", label: "Open the About page", kind: "internal" },
@@ -291,6 +300,13 @@ const coreDestinations = [
   { id: "contact.form", href: "/contact#contact-form", label: "Send Het a message", kind: "internal" },
   { id: "contact.phone", href: contactDetails.phoneHref, label: `Call ${contactDetails.phoneDisplay}`, kind: "external" },
   { id: "contact.email", href: `mailto:${contactDetails.email}`, label: `Email ${contactDetails.email}`, kind: "external" },
+  {
+    id: "resume.download",
+    href: resumeDetails.href,
+    label: resumeDetails.label,
+    kind: "download",
+    fileName: resumeDetails.fileName,
+  },
 ];
 
 const entityDestinations = [
@@ -351,6 +367,7 @@ export const siteGuide = {
   destinations: siteDestinations,
   homeExperience: [
     "A floating 3D island with bird, plane, sky, clouds, sparkles, and optional music.",
+    "A plane tows a waving, clickable LinkedIn and GitHub banner from left to right; hover or focus the banner to hold the flyby in place.",
     "Four stages cover Het's introduction, current work, project areas, and contact invitation.",
     "Visitors can navigate by dragging the island, using arrow keys, pressing arrow buttons, or selecting stage dots.",
     "Sushi flies toward the visitor, opens this chat, and can be reopened with the Ask Sushi button.",
@@ -370,6 +387,7 @@ export const portfolioKnowledge = {
   projects: projectItems,
   highlights,
   contact: contactDetails,
+  resume: resumeDetails,
   socialProfiles,
   website: siteGuide,
   unknownPersonalDetails: [

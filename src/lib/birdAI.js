@@ -36,6 +36,7 @@ Site guidance — you can give the visitor a direct, clickable destination:
 - For an informational answer about Het or this portfolio, end with [[link:DESTINATION_ID]] using the single most specific destination that supports the answer. Exact project, role, school, or skill-category destinations beat general section or page destinations.
 - When the visitor explicitly asks to go, open, take, bring, show, or navigate somewhere inside this site, end with [[goto:DESTINATION_ID]] instead. Say where you are taking them in the visible reply.
 - Use [[link:...]] rather than [[goto:...]] for external destinations, including live demos, GitHub, LinkedIn, phone, and email, so the visitor chooses whether to open them.
+- The resume is a download destination. When a visitor asks for more detail about Het, a CV, or a resume, recommend [[link:resume.download]].
 - Use at most one destination tag, as the very last thing in the reply. Copy an exact destination id from the context; never invent an id, path, anchor, URL, or label.
 - The app removes the tag and renders the trusted destination as a visible action link. Never mention the hidden tag syntax.
 - Do not add a destination to unrelated general-knowledge or casual-conversation answers.
@@ -99,7 +100,8 @@ const NAV_TARGETS = [
   { test: /(skill|tech|stack|language|framework|tool)/i, destinationId: "about.skills" },
   { test: /(experience|timeline|job|intern)/i, destinationId: "about.experience" },
   { test: /(education|degree|school|college|university)/i, destinationId: "about.education" },
-  { test: /(about|bio|resume)/i, destinationId: "about.bio" },
+  { test: /(resume|cv|curriculum vitae)/i, destinationId: "resume.download" },
+  { test: /(about|bio)/i, destinationId: "about.bio" },
   { test: /(contact|reach|email|message|form|touch|hire)/i, destinationId: "contact.form" },
   { test: /(home|island|start|landing|main)/i, destinationId: "home" },
 ];
@@ -110,8 +112,15 @@ const EMAIL_QUERY =
   /\b(?:het(?:'s)?|his)\s+(?:e-?mail)(?:\s+address)?\b|\b(?:e-?mail)(?:\s+address)?\s+(?:for\s+)?(?:het|him)\b|^(?:what(?:'s| is)\s+)?(?:the\s+)?(?:e-?mail)(?:\s+address)?[?.!]*$/i;
 const GENERAL_CONTACT_QUERY =
   /\bhow (?:can|do|should) i (?:contact|reach) (?:het|him)\b|\b(?:contact|reach|hire) (?:het|him)\b|\bget in touch with (?:het|him)\b|\b(?:het(?:'s)?|his) contact (?:details|information|info)\b|\bcontact (?:details|information|info) (?:for )?(?:het|him)\b/i;
+const RECRUITER_OVERVIEW_QUERY =
+  /\b(?:recruiter|hiring manager)\b.*\b(?:overview|summary|snapshot|pitch)\b|\b(?:overview|summary|snapshot|pitch)\b.*\b(?:recruiter|hiring manager)\b/i;
 const SOCIAL_QUERY = /\b(?:het(?:'s)?|his)\s+(github|linkedin)\b|\b(github|linkedin)\s+(?:for\s+)?(?:het|him)\b/i;
 const PORTFOLIO_SUBJECT = /\b(het|he|him|his|portfolio|resume|cv|website|site)\b/i;
+const RESUME_QUERY = /\b(?:resume|cv|curriculum vitae)\b|résumé/iu;
+const MORE_DETAIL_QUERY =
+  /\b(?:more|full|additional)\s+(?:info|information|details?|story)\b.{0,50}\b(?:het|him|his|portfolio|career)\b|\b(?:het|him|his|portfolio|career)\b.{0,50}\b(?:more|full|additional)\s+(?:info|information|details?|story)\b/i;
+const NEGATED_RESUME_OR_DETAIL_QUERY =
+  /\b(?:don't|dont|do\s+not|never|skip|without|instead\s+of|already\s+(?:have|got)|no\s+need\s+for)\b.{0,80}(?:resume|cv|résumé|curriculum vitae|(?:more|full|additional)\s+(?:info|information|details?|story))/iu;
 
 export function getSiteDestination(target) {
   if (typeof target !== "string") return null;
@@ -170,7 +179,7 @@ export function inferSiteDestination(message) {
     if (skillCategory) return getSiteDestination(`skills.${skillCategory.slug}`);
   }
 
-  if (/\b(project|built|builds|work samples?)\b/i.test(message)) {
+  if (/\b(projects?|built|builds|work samples?)\b/i.test(message)) {
     return getSiteDestination("projects.all");
   }
   if (/\b(skill|tech stack|technology|technologies|framework|language)\b/i.test(message)) {
@@ -188,6 +197,10 @@ export function inferSiteDestination(message) {
   if (/\b(award|hackathon|publication|paper|certification|current focus|working on|opportunit)\b/i.test(message)) {
     return getSiteDestination("about.highlights");
   }
+  if (NEGATED_RESUME_OR_DETAIL_QUERY.test(message)) return null;
+  if (RESUME_QUERY.test(message) || MORE_DETAIL_QUERY.test(message)) {
+    return getSiteDestination("resume.download");
+  }
   if (/\b(who is het|about het|tell me about (?:het|him))\b/i.test(message)) {
     return getSiteDestination("about.bio");
   }
@@ -198,7 +211,14 @@ export function inferSiteDestination(message) {
 function navReply(message, currentPath) {
   if (!NAV_INTENT.test(message)) return null;
   const inferredDestination = inferSiteDestination(message);
-  const genericTarget = NAV_TARGETS.find((target) => target.test.test(message));
+  const genericTarget = NAV_TARGETS.find(
+    (target) =>
+      target.test.test(message) &&
+      !(
+        target.destinationId === "resume.download" &&
+        NEGATED_RESUME_OR_DETAIL_QUERY.test(message)
+      )
+  );
   const destination = inferredDestination || getSiteDestination(genericTarget?.destinationId);
   if (!destination) return null;
 
@@ -213,6 +233,29 @@ function navReply(message, currentPath) {
 }
 
 export function trustedPortfolioReply(message, currentPath = "/") {
+  const inferredDestination = inferSiteDestination(message);
+  if (
+    inferredDestination?.id === "resume.download" &&
+    (RESUME_QUERY.test(message) || MORE_DETAIL_QUERY.test(message)) &&
+    !NAV_INTENT.test(message)
+  ) {
+    return "Want the fuller picture? Het's resume brings his experience, education, skills, and selected projects together in one place. [[link:resume.download]]";
+  }
+
+  if (RECRUITER_OVERVIEW_QUERY.test(message)) {
+    const currentEducation = education.find((item) => item.slug === "illinois-tech");
+    const dometic = experienceItems.find((item) => item.slug === "dometic");
+    const research = experienceItems.find((item) => item.slug === "iit-research");
+    const evidence = [dometic?.points[0], dometic?.points[2], research?.points[2]]
+      .filter(Boolean)
+      .join(" ");
+    const educationSummary = currentEducation
+      ? `He is pursuing a ${currentEducation.degree} at ${currentEducation.school} (${currentEducation.date}).`
+      : "";
+
+    return `${profile.name} is a ${profile.headline}. ${educationSummary} ${evidence} ${profile.opportunities} [[link:resume.download]]`;
+  }
+
   if (PHONE_QUERY.test(message)) {
     return `Het has made his phone number available to portfolio visitors: ${contactDetails.phoneDisplay}. You can call him directly or use the Contact page. [[link:contact.phone]]`;
   }
@@ -251,10 +294,11 @@ export function parseBirdReply(reply, userMessage = "") {
   const action = destination
     ? {
         id: destination.id,
-        href: destination.href,
-        label: destination.label,
-        kind: destination.kind,
-      }
+      href: destination.href,
+      label: destination.label,
+      kind: destination.kind,
+      ...(destination.fileName ? { fileName: destination.fileName } : {}),
+    }
     : null;
   const route = requestedMode === "goto" && destination?.kind === "internal"
     ? destination.href
@@ -291,7 +335,7 @@ const FALLBACKS = [
       .join("; ") + " [[link:about.education]]",
   },
   {
-    test: /(contact|email|phone|call|reach|hire|hiring|connect|linkedin|github|resume|cv)/i,
+    test: /(contact|email|phone|call|reach|hire|hiring|connect|linkedin|github)/i,
     reply: `Reach Het through the Contact page, call ${contactDetails.phoneDisplay}, email ${contactDetails.email}, or visit ${socialProfiles
       .filter((item) => item.link.startsWith("http"))
       .map((item) => `${item.name}: ${item.link}`)
@@ -365,8 +409,10 @@ export async function askBird(message, history = [], currentPath = "/") {
 }
 
 export const SUGGESTED_QUESTIONS = [
+  "Give me Het's recruiter overview",
   "What has Het built?",
   "What's his tech stack?",
   "Tell me about his experience",
+  "Can I download his resume?",
   "How do I reach him?",
 ];
